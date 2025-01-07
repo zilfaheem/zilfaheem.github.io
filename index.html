@@ -18,6 +18,12 @@
           $.post('/exchange_public_token', {
             public_token: public_token,
           });
+          console.log('---------------------');
+          
+          console.log(metadata);
+          console.log(metadata.institution.name);
+          console.log(metadata.institution.institution_id);
+          console.log('---------------------');
         },
         onExit: function(err, metadata) {
           // Handle exit scenarios here
