@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+</head>
+<body>
+  <script type="text/javascript">
+    (async function($) {
+      var handler = Plaid.create({
+        token: "link-sandbox-f3e82ad5-edee-4938-b7eb-fc4af34ba1ee",
+        onLoad: function() {
+          // Automatically open Plaid Link on page load
+          handler.open();
+        },
+        onSuccess: function(public_token, metadata) {
+          // Send the public_token to your app server
+          $.post('/exchange_public_token', {
+            public_token: public_token,
+          });
+        },
+        onExit: function(err, metadata) {
+          // Handle exit scenarios here
+          if (err != null) {
+            console.error('Error during Plaid Link:', err);
+          }
+        },
+        onEvent: function(eventName, metadata) {
+          // Handle event callbacks if needed
+          console.log('Plaid Link event:', eventName, metadata);
+        },
+      });
+
+      // Automatically open the handler if it hasn't opened during `onLoad`
+      $(document).ready(function() {
+        handler.open();
+      });
+    })(jQuery);
+  </script>
+</body>
+</html>
