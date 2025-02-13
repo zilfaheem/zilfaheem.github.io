@@ -1,47 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
-</head>
-<body>
-  <script type="text/javascript">
-    (async function($) {
-      var handler = Plaid.create({
-        token: "link-sandbox-d54f1463-82c1-49e7-b987-4337555d0a0c",
-        onLoad: function() {
-          // Automatically open Plaid Link on page load
-          handler.open();
-        },
-        onSuccess: function(public_token, metadata) {
-          // Send the public_token to your app server
-          $.post('/exchange_public_token', {
-            public_token: public_token,
-          });
-          console.log('---------------------');
-          
-          console.log(JSON.parse(metadata));
-          console.log(metadata.institution.name);
-          console.log(metadata.institution.institution_id);
-          console.log('---------------------');
-        },
-        onExit: function(err, metadata) {
-          // Handle exit scenarios here
-          if (err != null) {
-            console.error('Error during Plaid Link:', err);
-          }
-        },
-        onEvent: function(eventName, metadata) {
-          // Handle event callbacks if needed
-          console.log('Plaid Link event:', eventName, metadata);
-        },
-      });
+<html>
 
-      // Automatically open the handler if it hasn't opened during `onLoad`
-      $(document).ready(function() {
-        handler.open();
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="@string/app_name">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Online Check Writer">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <title>ocw_flutter</title>
+  <link rel="manifest" href="manifest.json">
+  <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js"
+    defer></script>
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = "1987963114";
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <script charset="utf-8" src="https://js.pusher.com/7.0/pusher.min.js"></script>
+</head>
+
+<body>
+  <script>
+    window.addEventListener('load', function (ev) {
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            appRunner.runApp();
+          });
+        }
       });
-    })(jQuery);
+    });
   </script>
 </body>
+
 </html>
